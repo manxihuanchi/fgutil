@@ -41,28 +41,28 @@ public class JavaCompilerFactory {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Class compilerJavaFile(String packageName, String clazzName, byte[] javaData) throws Exception {
-		String basePath = System.getProperty("user.dir")+ "/target/classes/";
-		String packageNamePath = packageName.replace(".", "/");
-		String clzzPath = basePath + packageNamePath + "/" + clazzName;
-		
-		String javaFilePath = clzzPath + JAVA_FILE_SUFFIX;
-		File javaFile = new File(javaFilePath);
-		
-		FileUtils.writeByteArrayToFile(javaFile, javaData);
-		// 编译java文件
-		compiler(javaFile);
-		
-		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-		Class<?> loadClass = classLoader.loadClass(packageName + "."+clazzName);
-		// java .class 文件没有删除。  测试后确定是否要删除
-		String clazzFileName = clzzPath + JAVA_CLAZZ_FILE_SUFFIX;
-		File clazzFile = new File(clazzFileName);
+//	public static Class compilerJavaFile(String packageName, String clazzName, byte[] javaData) throws Exception {
+//		String basePath = System.getProperty("user.dir")+ "/target/classes/";
+//		String packageNamePath = packageName.replace(".", "/");
+//		String clzzPath = basePath + packageNamePath + "/" + clazzName;
+//		
+//		String javaFilePath = clzzPath + JAVA_FILE_SUFFIX;
+//		File javaFile = new File(javaFilePath);
+//		
+//		FileUtils.writeByteArrayToFile(javaFile, javaData);
+//		// 编译java文件
+//		compiler(javaFile);
+//		
+//		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+//		Class<?> loadClass = classLoader.loadClass(packageName + "."+clazzName);
+//		// java .class 文件没有删除。  测试后确定是否要删除
+//		String clazzFileName = clzzPath + JAVA_CLAZZ_FILE_SUFFIX;
+//		File clazzFile = new File(clazzFileName);
 //		javaFile.delete();
-//		clazzFile.delete();
-		
-		return loadClass;
-	}
+////		clazzFile.delete();
+//		
+//		return loadClass;
+//	}
 	
 	/**
 	 *  
@@ -73,7 +73,40 @@ public class JavaCompilerFactory {
 	 * @return 返回编译文件的Class， 并删除源文件， 不删除class文件
 	 * @throws Exception
 	 */
-	public static File compilerJava(String packageName, String clazzName, byte[] javaData) throws Exception {
+//	public static File compilerJava(String packageName, String clazzName, byte[] javaData) throws Exception {
+//		String basePath = System.getProperty("user.dir")+ "/target/classes/";
+//		String packageNamePath = packageName.replace(".", "/");
+//		String clzzPath = basePath + packageNamePath + "/" + clazzName;
+//		
+//		String javaFilePath = clzzPath + JAVA_FILE_SUFFIX;
+//		File javaFile = new File(javaFilePath);
+//		
+//		FileUtils.writeByteArrayToFile(javaFile, javaData);
+//		// 编译java文件
+//		compiler(javaFile);
+//		
+//		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+//		Class<?> loadClass = classLoader.loadClass(packageName + "."+clazzName);
+//		// java .class 文件没有删除。  测试后确定是否要删除
+//		String clazzFileName = clzzPath + JAVA_CLAZZ_FILE_SUFFIX;
+//		File clazzFile = new File(clazzFileName);
+//		javaFile.delete();
+//		
+//		return clazzFile;
+//	}
+	
+	/**
+	 *  发挥编译文件的Class， 并删除源文件和class文件
+	 * 
+	 * @param packageName  java包名， 例： aaa.ddd.ccc
+	 * @param clazzName   类名
+	 * @param javaData  java 完整的数据
+	 * @param delJavaSource 删除java源文件
+	 * @param delJavaClazz  删除javaClass 文件
+	 * @return
+	 * @throws Exception
+	 */
+	public static Class compilerJavaFile(String packageName, String clazzName, byte[] javaData, boolean delJavaSource, boolean delJavaClazz) throws Exception {
 		String basePath = System.getProperty("user.dir")+ "/target/classes/";
 		String packageNamePath = packageName.replace(".", "/");
 		String clzzPath = basePath + packageNamePath + "/" + clazzName;
@@ -90,9 +123,19 @@ public class JavaCompilerFactory {
 		// java .class 文件没有删除。  测试后确定是否要删除
 		String clazzFileName = clzzPath + JAVA_CLAZZ_FILE_SUFFIX;
 		File clazzFile = new File(clazzFileName);
-//		javaFile.delete();
 		
-		return clazzFile;
+		if (delJavaSource) {
+			//删除java源文件
+			javaFile.delete();
+		}
+		
+		if (delJavaClazz) {
+			//删除javaClass 文件
+			clazzFile.delete();
+		}
+		
+		return loadClass;
 	}
+	
 	
 }
